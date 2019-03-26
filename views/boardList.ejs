@@ -1,0 +1,74 @@
+<!Doctype html>
+<html>
+    <head>
+    title 게시판 목록
+    </head>
+    <body>
+        <h1>게시판 목록</h1>
+        <table border="1">
+            <tr>
+                <td>번호</td>
+                <td>제목</td>
+                <td>작성자</td>
+            </tr>
+            <%
+            model.boardList.forEach((item, index)=>{
+            %>
+            <tr>
+                <td><%=item.board_no%></td>
+                <td><a href="/boardDetail/<%= item.board_no %>"><%=item.board_title%></a></td>
+                <td><%=item.board_user%></td>
+               
+            </tr>
+            <%
+            });
+            %>
+        </table>
+        <%
+        if(model.currentPage > 1){
+        %>
+            <a href="/boardList/<%= model.currentPage-1 %>">[이전]</a>     
+        <%
+       
+        };
+        %>
+        <%
+        if(model.currentPage < model.lastPage){
+        %>
+  
+            <a href="/boardList/<%= model.currentPage+1 %>">[다음]</a>
+     
+           
+        <%
+        };
+        %>
+       
+        <a href="/boardList/<%= model.lastPage %>">[last page]</a><br>
+        <a href="/boardList/<%= model.currentPage = 1 %>">[fitst page]</a>
+        <a href="/addboard">글 추가</a><br>
+        <%  
+        <!-- id값이 null이면 로그인 null이 아니면 로그아웃 -->
+        if(model.member_id != null){
+        %>
+          
+            <form action="/logout" method="get">
+                <button type="submit">로그아웃</button> 
+            </form>
+            <a href = "/deleteMember/<%=model.member_id %>">회원 탈퇴</a>
+      
+        <%
+             }else if(model.member_id == null){
+ 
+        %>    
+            <form action="/login" method="get">
+                <button type="submit">로그인</button> 
+            </form>
+        <%
+              }
+        %>
+        
+
+
+
+    </body>
+</html>

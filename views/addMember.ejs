@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('#addMemberBtn').click(function(){
+                   if($('#member_id').val() == ''){
+                       $('#member_id').focus();
+                       $('#member_id').attr('placeholder', 'ID를 입력해 주세요.');
+                        return false;
+                    }else if($('#member_pw').val()==''){
+                        $('#member_pw').focus();
+                        $('#member_pw').attr('placeholder', 'PW를 입력해 주세요.');
+                        return false;
+                    }else if($('#member_name').val()==''){
+                        $('#member_name').focus();
+                        $('#member_name').attr('placeholder','NAME을 입력해 주세요.');
+                        return false;
+                    }
+                });
+              
+            });
+        </script>
+    </head>
+    <title>
+    </title>
+    <body>
+        <h1>회원가입 폼</h1>
+        <form action="/addMember" method="post" >
+            <table>
+                <tr>
+                    <th>ID : </th> 
+                    <td>
+                    <input type="text" name="member_id" id="member_id"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <th>PW : </th> 
+                    <td>
+                        <input type="password" name="member_pw" id="member_pw"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <th>NAME : </th> 
+                    <td>
+                        <input type="text" name="member_name" id="member_name"></input>
+                    </td>
+                </tr>
+            </table>
+                <button type="submit" id="addMemberBtn">가입하기</button>         
+        </form>
+    </body>
+
+</html>

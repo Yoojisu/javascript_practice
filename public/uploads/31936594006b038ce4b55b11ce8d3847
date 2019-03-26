@@ -1,0 +1,79 @@
+app.js
+========================================================================
+router.get('/checkid', (req,res)=>{
+    const member_id = req.query.check;
+    console.log(member_id);
+    let sql = 'SELECT checked.member_id AS id FROM (SELECT member_id FROM member UNION SELECT member_id FROM memberid) AS checked WHERE checked.member_id=?';
+    pool.getConnection((err, conn)=>{
+        conn.query(sql, [member_id], (err, rs)=>{
+            console.log(rs.length + '<---결과');
+            if(rs.length==0){
+                res.send({result:'가능'});
+            }else{
+                res.send({result:'중복'});
+            }
+        });
+    });
+});
+======================================================================
+회원가입폼
+<html>
+    <head>
+        <script src='http://code.jquery.com/jquery-latest.js'></script>
+        <script>
+            $(document).ready(()=>{
+                $('#checkid').click(()=>{
+                    $('#memberPw').val('');
+                    $('#memberName').val('');
+                    $('#checkResult').text('');
+                    $('#memberPw').attr('readonly','readonly');
+                    $('#memberName').attr('readonly','readonly');
+                    $('#btnAddMember').attr('type','button');
+                });
+                $('#check').click(()=>{
+                    if($('#checkid').val()==''){
+                        $('#checkResult').text('공백입니다.');
+                    }else{
+                        $.ajax({
+                            url:'/checkid',
+                            dataType:'json',
+                            type:'GET',
+                            data:{check:$('#checkid').val()},
+                            success: (rs)=>{
+                                if(rs.result=='중복'){
+                                    console.log(rs.result);
+                                    $('#checkResult').text('아이디가 중복입니다.');
+                                }else{
+                                    $('#checkResult').text('아이디 사용 가능합니다.');
+                                    $('#memberPw').removeAttr('readonly');
+                                    $('#memberName').removeAttr('readonly');
+                                    $('#btnAddMember').attr('type','submit');
+                                }
+                            }
+                        });
+                    } 
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <form action="/addMember" method="post">
+            <div>
+                ID :
+                <input id="checkid" type="text" name="member_id">
+                <button id="check" type="button">
+                    중복확인
+                </button>
+            </div>
+            <div>
+                PW :
+                <input type="text" name="member_pw">
+            </div>
+            <div>
+                NAME :
+                <input type="text" name="member_name">
+            </div>
+            <input type="submit" value="회원가입">
+        </form>
+    </body>
+</html>    
